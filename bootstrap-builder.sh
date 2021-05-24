@@ -21,9 +21,11 @@ install_env() {
       subscription-manager register --username="${rhel_username}" --password="${rhel_password}"
       subscription-manager attach
       if [[ "${dist_version}" =~ "7" ]]; then
+        yum update -y
         yum install -y yum-utils git rpm-build
         yum-config-manager --enable rhel-7-server-optional-rpms
       elif [[ "${dist_version}" =~ "8" ]]; then
+        dnf update -y
         dnf install -y 'dnf-command(builddep)' git rpm-build
         dnf config-manager --set-enabled codeready-builder-for-rhel-8-x86_64-rpms
       else
@@ -34,6 +36,7 @@ install_env() {
       ;;
     centos)
       yum install -y dnf
+      dnf update -y
       dnf install -y 'dnf-command(builddep)' git rpm-build
       if [ "${dist_version}" -eq 8 ]; then
         dnf config-manager --set-enabled powertools
@@ -41,11 +44,13 @@ install_env() {
       adduser builder
       ;;
     fedora)
+      dnf update -y
       dnf install -y 'dnf-command(builddep)' git rpm-build
       adduser builder
       ;;
     debian)
       apt-get update
+      apt-get -y upgrade
       apt-get install -y build-essential devscripts git
       adduser builder
       ;;
@@ -60,10 +65,12 @@ install_env() {
       su - builder -c "abuild-keygen -a -i"
       ;;
     opensuse-leap)
+      zypper -n update
       zypper -n install curl git rpm-build
       useradd builder
       ;;
     opensuse-tumbleweed)
+      zypper -n update
       zypper -n install curl shadow git rpm-build
       useradd builder
       ;;
