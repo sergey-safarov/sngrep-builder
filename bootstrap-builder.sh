@@ -24,9 +24,12 @@ install_env() {
       if [[ "${dist_version}" =~ "7" ]]; then
         yum install -y yum-utils git rpm-build
         yum-config-manager --enable rhel-7-server-optional-rpms
-      else
+      elif [[ "${dist_version}" =~ "8" ]]; then
         dnf install -y 'dnf-command(builddep)' git rpm-build
-        dnf config-manager --set-enabled codeready-builder-for-rhel-${dist_version}-x86_64-rpms
+        dnf config-manager --set-enabled codeready-builder-for-rhel-8-x86_64-rpms
+      else
+          echo "not supported dist version: ${dist_version}"
+          exit 1
       fi
       ;;
     centos)
