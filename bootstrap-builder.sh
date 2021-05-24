@@ -47,7 +47,7 @@ install_env() {
       apt-get install -y build-essential devscripts git
       ;;
     alpine)
-      adduser builder
+      adduser -D builder
       addgroup builder abuild
       apk --no-cache upgrade
       apk --no-cache add alpine-sdk sudo git
