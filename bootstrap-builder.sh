@@ -23,7 +23,7 @@ install_env() {
       subscription-manager attach
       if [[ "${dist_version}" =~ "7" ]]; then
         yum install -y yum-utils git rpm-build
-        yum-config-manager --enablerepo=rhel-7-server-optional-rpms
+        yum-config-manager --enable rhel-7-server-optional-rpms
       else
         dnf install -y 'dnf-command(builddep)' git rpm-build
         dnf config-manager --set-enabled codeready-builder-for-rhel-${dist_version}-x86_64-rpms
@@ -124,7 +124,9 @@ cleanup() {
   case ${dist} in
     rhel)
       yum clean all
-      dnf clean all
+      if [[ "${dist_version}" =~ "8" ]]; then
+        dnf clean all
+      fi
       subscription-manager remove --all
       subscription-manager unregister
       ;;
