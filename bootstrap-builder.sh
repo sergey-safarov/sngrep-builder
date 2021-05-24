@@ -64,8 +64,8 @@ install_env() {
       zypper -n install curl git rpm-build
       ;;
     opensuse-tumbleweed)
-      useradd builder
       zypper -n install curl shadow git rpm-build
+      useradd builder
       ;;
   esac
 }
