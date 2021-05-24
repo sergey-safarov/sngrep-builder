@@ -18,7 +18,6 @@ install_env() {
   local dist_version=$2
   case ${dist} in
     rhel)
-      adduser builder
       subscription-manager register --username="${rhel_username}" --password="${rhel_password}"
       subscription-manager attach
       if [[ "${dist_version}" =~ "7" ]]; then
@@ -31,37 +30,38 @@ install_env() {
           echo "not supported dist version: ${dist_version}"
           exit 1
       fi
+      adduser builder
       ;;
     centos)
-      adduser builder
       yum install -y dnf
       dnf install -y 'dnf-command(builddep)' git rpm-build
       if [ "${dist_version}" -eq 8 ]; then
         dnf config-manager --set-enabled powertools
       fi
+      adduser builder
       ;;
     fedora)
-      adduser builder
       dnf install -y 'dnf-command(builddep)' git rpm-build
+      adduser builder
       ;;
     debian)
-      adduser builder
       apt-get update
       apt-get install -y build-essential devscripts git
+      adduser builder
       ;;
     alpine)
-      adduser -D builder
-      addgroup builder abuild
       apk --no-cache upgrade
       apk --no-cache add alpine-sdk sudo git
+      adduser -D builder
+      addgroup builder abuild
       echo "%abuilder ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/abuild
       su - builder -c "git config --global user.name 'Your Full Name'"
       su - builder -c "git config --global user.email 'your@email.address'"
       su - builder -c "abuild-keygen -a -i"
       ;;
     opensuse-leap)
-      useradd builder
       zypper -n install curl git rpm-build
+      useradd builder
       ;;
     opensuse-tumbleweed)
       zypper -n install curl shadow git rpm-build
