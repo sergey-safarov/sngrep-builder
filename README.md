@@ -24,10 +24,9 @@ export base_image=opensuse/leap
 export image_tag=15
 docker build \
     --no-cache \
-    --build-arg base_image=registry.redhat.io/ubi${image_tag} \
+    --build-arg base_image=${base_image} \
+    --build-arg image_tag=${image_tag} \
     --build-arg image_tag=latest \
-    --build-arg rhel_username=${rhel_username} \
-    --build-arg rhel_password=${rhel_password} \
     -t ${repo_owner}/sngrep-builder:opensuse-${image_tag} \
     -f Dockerfile-builder .
 ```
